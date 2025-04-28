@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./certs:/etc/nginx/certs
+      - ./src:/var/www/html
+    depends_on:
+      - php
+    networks:
+      - localnet
+
+  php:
+    image: php:8.2-fpm
+    volumes:
+      - ./src:/var/www/html
+    networks:
+      - localnet
+
+networks:
+  localnet:
+    driver: bridge
